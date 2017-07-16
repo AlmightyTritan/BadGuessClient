@@ -1,0 +1,120 @@
+// Purpose: This file contains the mixins
+// Date: Jun 17 2016
+
+// Purpose: This mixin will build media queries
+// Date: June 17 2016
+@mixin breakpoint($size) {
+    @if $size == 'small' {
+        @media only screen and (max-width: #{$breakpoint-small - 1px}) {
+            @content;
+        }
+    }
+    @else if $size == 'medium' {
+        @media only screen and (min-width: #{$breakpoint-small}) and (max-width: #{$breakpoint-medium - 1px}) {
+            @content;
+        }
+    }
+    @else if $size == 'large' {
+        @media only screen and (min-width: #{$breakpoint-medium}) {
+            @content;
+        }
+    }
+}
+
+// Purpose: This mixin will inherit the properties of the previous block or element
+// Date: June 17 2016
+@mixin modifier($name) {
+    @at-root {
+        // '&' is a double-wrapped list
+        $selector: nth(&, 1);
+        // direct parent will be the last item in that list
+        $direct-parent: nth($selector, length($selector));
+        // modifier should have all properties of parent
+        #{$direct-parent}--#{$name} { @extend #{$direct-parent} !optional; }
+        // '@content' will be in a nested selector however, if that is the context
+        #{&}--#{$name} { @content; }
+    }
+}
+
+// Purpose: This mixin will build a standalone element with no inheritance
+// Date: June 17 2016
+@mixin element($name) {
+    @at-root {
+        #{&}__#{$name} {
+            @content;
+        }
+    }
+}
+
+// Purpose: This mixin will make an element retain a specified aspect ration
+// Author: Chris Coyier
+// Source: https://css-tricks.com/snippets/sass/maintain-aspect-ratio-mixin/
+// Date: Feb 11 2015
+@mixin aspect-ratio($width, $height) {
+    position: relative;
+    &:before {
+        display: block;
+        content: "";
+        width: 100%;
+        padding-top: ($height / $width) * 100%;
+    }
+    > .content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+}
+
+// Purpose: This mixin will create a material design box shadow.
+// Date: Dec 17 2016
+@mixin box-shadow ($dp) {
+    @if $dp == 2 {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, $shade-key-penumbra-opacity),
+            0 3px 1px -2px rgba(0, 0, 0, $shade-key-umbra-opacity),
+            0 1px 5px 0 rgba(0, 0, 0, $shade-ambient-shadow-opacity);
+    }
+
+    @else if $dp == 3 {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, $shade-key-penumbra-opacity),
+            0 3px 1px -2px rgba(0, 0, 0, $shade-key-umbra-opacity),
+            0 1px 5px 0 rgba(0, 0, 0, $shade-ambient-shadow-opacity);
+    }
+
+    @else if $dp == 4 {
+        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, $shade-key-penumbra-opacity),
+            0 1px 10px 0 rgba(0, 0, 0, $shade-ambient-shadow-opacity),
+            0 2px 4px -1px rgba(0, 0, 0, $shade-key-umbra-opacity);
+    }
+
+    @else if $dp == 6 {
+        box-shadow: 0 6px 10px 0 rgba(0, 0, 0, $shade-key-penumbra-opacity),
+            0 1px 18px 0 rgba(0, 0, 0, $shade-ambient-shadow-opacity),
+            0 3px 5px -1px rgba(0, 0, 0, $shade-key-umbra-opacity);
+    }
+
+    @else if $dp == 8 {
+        box-shadow: 0 8px 10px 1px rgba(0, 0, 0, $shade-key-penumbra-opacity),
+            0 3px 14px 2px rgba(0, 0, 0, $shade-ambient-shadow-opacity),
+            0 5px 5px -3px rgba(0, 0, 0, $shade-key-umbra-opacity);
+    }
+
+    @else if $dp == 16 {
+        box-shadow: 0 16px 24px 2px rgba(0, 0, 0, $shade-key-penumbra-opacity),
+            0  6px 30px 5px rgba(0, 0, 0, $shade-ambient-shadow-opacity),
+            0  8px 10px -5px rgba(0, 0, 0, $shade-key-umbra-opacity);
+    }
+
+    @else if $dp == 3 {
+        box-shadow: 0  9px 46px  8px rgba(0, 0, 0, $shade-key-penumbra-opacity),
+            0 11px 15px -7px rgba(0, 0, 0, $shade-ambient-shadow-opacity),
+            0 24px 38px  3px rgba(0, 0, 0, $shade-key-umbra-opacity);
+    }
+
+    @else {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, $shade-key-penumbra-opacity),
+            0 3px 1px -2px rgba(0, 0, 0, $shade-key-umbra-opacity),
+            0 1px 5px 0 rgba(0, 0, 0, $shade-ambient-shadow-opacity);
+    }
+}

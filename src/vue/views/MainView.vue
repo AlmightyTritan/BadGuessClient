@@ -1,5 +1,5 @@
 <template lang="html">
-    <main class="view">
+    <main class="view--main">
         <player-form></player-form>
     </main>
 </template>
@@ -24,5 +24,15 @@ export default class MainView extends Vue {
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
+@import '~scss/util/util';
+@import '~scss/partial/components/view';
+
+// view--main
+.view--main {
+    @extend .view;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 </style>

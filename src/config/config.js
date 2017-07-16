@@ -5,5 +5,5 @@
 
 export default {
     // User
-    usernameLimit: 12,
+    usernameLimit: 18,
 }

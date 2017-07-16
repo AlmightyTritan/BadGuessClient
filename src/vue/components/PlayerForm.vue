@@ -1,8 +1,11 @@
 <template lang="html">
-    <form @submit.prevent="joinRoom">
-        <input type="text" v-model.trim="username" :invalid="!usernameValid">
-        <input type="text" v-model.trim="roomCode" :invalid="!roomCodeValid">
-        <input type="submit">
+    <form @submit.prevent="joinRoom" class="player-form">
+        <h3 class="player-form__header">Join Game</h3>
+        <section class="player-form__inputs">
+            <input type="text" v-model.trim="username" :invalid="usernameInvalid" placeholder="Username">
+            <input type="text" v-model.trim="roomCode" :invalid="roomCodeInvalid" placeholder="Room code">
+        </section>
+        <button @click.prevent="joinRoom" class="button--round player-form__button" tabindex="0"><i class="material-icons">play_arrow</i></button>
     </form>
 </template>
 
@@ -20,18 +23,22 @@ import config from 'config/config.js';
 @Component
 export default class PlayerForm extends Vue {
     // Class data
-    username = '';
-    roomCode = '';
-    usernameValid = '';
-    roomCodeValid = '';
+    username = null;
+    roomCode = null;
+    usernameInvalid = null;
+    roomCodeInvalid = null;
 
     /**
      * @desc This method will let the player join the requested room
      * @since Jul 15 2017
      */
     joinRoom() {
+        // If either of the fields were null at the time set invalid
+        this.usernameInvalid = this.username === null ? true : false;
+        this.roomCodeInvalid = this.roomCode === null ? true : false;
+
         // If the form is invalid
-        if (!this.usernameValid || !this.roomCodeValid) {
+        if (this.usernameInvalid || this.roomCodeInvalid) {
             return;
         }
 
@@ -46,13 +53,13 @@ export default class PlayerForm extends Vue {
     @Watch('username')
     onUsernameChange() {
         // If the username length is longer than 0 validate it
-        if (this.username.length <= 0) {
-            this.usernameValid = false;
+        if (this.username.length == '' && this.username !== null) {
+            this.usernameInvalid = true;
         }
 
         // Else it's valid
         else {
-            this.usernameValid = true;
+            this.usernameInvalid = false;
         }
 
         // If the username is longer than 12 chars clamp it
@@ -68,17 +75,60 @@ export default class PlayerForm extends Vue {
     @Watch('roomCode')
     onRoomCodeChange() {
         // If the username length is longer than 0 validate it
-        if (this.roomCode.length <= 0) {
-            this.roomCodeValid = false;
+        if (this.roomCode.length == '' && this.roomCode !== null) {
+            this.roomCodeInvalid = true;
         }
 
         // Else it's valid
         else {
-            this.roomCodeValid = true;
+            this.roomCodeInvalid = false;
         }
     }
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
+@import '~scss/util/util';
+
+// player-form
+.player-form {
+    position: relative;
+    display: flex;
+    max-width: 400px;
+    padding-bottom: 32px;
+    margin: 16px;
+    flex-direction: column;
+    box-sizing: border-box;
+    border-radius: 4px;
+    background-color: lighten($color-background, 2);
+    @include box-shadow(2);
+
+    // player-form__header
+    @include element('header') {
+        padding: 32px 16px 16px 16px;
+        margin: 0;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        background: $color-accent;
+    }
+
+    // player-form__inputs
+    @include element('inputs') {
+        padding: 16px;
+        box-sizing: border-box;
+
+        // Input
+        input {
+            width: 100%;
+        }
+    }
+
+    // player-form__button
+    @include element('button') {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translate(-50%, 50%);
+    }
+}
 </style>

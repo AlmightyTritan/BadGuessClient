@@ -1,0 +1,11 @@
+// Purpose: This is the main Sass file that will be imported into the root
+//      vue component. It contains all partial and utility styles
+// Date: Jul 16 2017
+
+// Imports
+@import 'util/util';
+@import 'partial/normalize';
+@import 'partial/typography';
+@import 'partial/inputs';
+@import 'partial/components/view';
+@import 'partial/components/button';

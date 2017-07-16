@@ -1,0 +1,29 @@
+// Purpose: This file contains the base styling for input tags
+// Date: Jul 16 2017
+
+// Textfield inputs
+input[type="text"],
+input[type="password"] {
+    padding: 8px 16px 6px 16px;
+    margin: 4px 0;
+    color: $color-text-primary;
+    background: lighten($color-background, 4);
+    border: none;
+    border-bottom: 2px solid lighten($color-background, 4);
+    outline: none;
+    box-sizing: border-box;
+    will-change: border;
+    transition: 0.375s $curve-standard;
+    @include box-shadow(1);
+
+    // Invalid
+    &[invalid="true"] {
+        border-bottom: 2px solid $color-invalid;
+    }
+
+    // Focus
+    &:focus {
+        border-bottom: 2px solid $color-accent;
+    }
+
+}

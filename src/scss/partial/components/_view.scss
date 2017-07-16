@@ -1,0 +1,10 @@
+// Purpose: This Sass file contains the partial styling for views to extend
+// Date: Jul 16 2017
+
+// view
+.view {
+    background: $color-background;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+}

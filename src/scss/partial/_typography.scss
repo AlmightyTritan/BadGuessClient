@@ -1,0 +1,103 @@
+// Purpose: Partial file containing the base styling for all typography.
+// Date: Dec 16 2016
+
+body {
+    color: $color-text-primary;
+    font-size: $base-font-size;
+    font-size-adjust: 0.5;
+    font-family: 'Roboto', sans-serif;
+    text-rendering: optimizeLegibility;
+
+    //Breakpoints
+    @include breakpoint('small') {
+        line-height: 1.25;
+    }
+    @include breakpoint('medium') {
+        line-height: 1.375;
+    }
+    @include breakpoint('large') {
+        line-height: 1.375;
+    }
+}
+
+a {
+    color: $color-accent;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+h1 {
+    font-size-adjust: 0.5;
+
+    //Breakpoints
+    @include breakpoint('small') {
+        font-size: #{$base-font-size * map-get($font-scale-small, h1)};
+        line-height: 1.25;
+    }
+    @include breakpoint('medium') {
+        font-size: #{$base-font-size * map-get($font-scale-medium, h1)};
+        line-height: 1.125;
+    }
+    @include breakpoint('large') {
+        font-size: #{$base-font-size * map-get($font-scale-large, h1)};
+        line-height: 1.05;
+    }
+}
+
+h2 {
+    font-size-adjust: 0.5;
+
+    //Breakpoints
+    @include breakpoint('small') {
+        font-size: #{$base-font-size * map-get($font-scale-small, h2)};
+        line-height: 1.15384615;
+    }
+    @include breakpoint('medium') {
+        font-size: #{$base-font-size * map-get($font-scale-medium, h2)};
+        line-height: 1.25;
+    }
+    @include breakpoint('large') {
+        font-size: #{$base-font-size * map-get($font-scale-large, h2)};
+        line-height: 1.25;
+    }
+}
+
+h3 {
+    font-size-adjust: 0.5;
+
+    //Breakpoints
+    @include breakpoint('small') {
+        font-size: #{$base-font-size * map-get($font-scale-small, h3)};
+        line-height: 1.13636364;
+    }
+    @include breakpoint('medium') {
+        font-size: #{$base-font-size * map-get($font-scale-medium, h3)};
+        line-height: 1.25;
+    }
+    @include breakpoint('large') {
+        font-size: #{$base-font-size * map-get($font-scale-large, h3)};
+        line-height: 1.25;
+    }
+}
+
+h4 {
+    font-size-adjust: 0.5;
+
+    //Breakpoints
+    @include breakpoint('small') {
+        font-size: #{$base-font-size * map-get($font-scale-small, h4)};
+        line-height: 1.11111111;
+    }
+    @include breakpoint('medium') {
+        font-size: #{$base-font-size * map-get($font-scale-medium, h4)};
+        line-height: 1.22222222;
+    }
+    @include breakpoint('large') {
+        font-size: #{$base-font-size * map-get($font-scale-large, h4)};
+        line-height: 1.22222222;
+    }
+}
+
+h5, h6 {
+    font-size-adjust: 0.5;
+}

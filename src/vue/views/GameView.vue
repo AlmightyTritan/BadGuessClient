@@ -21,9 +21,8 @@ import DrawingCanvas from 'vue/components/DrawingCanvas.vue';
     }
 })
 export default class GameView extends Vue {
-
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
 </style>

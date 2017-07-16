@@ -1,0 +1,37 @@
+// Purpose: This file contains extendable styling for button components
+// Date: Jul 16 2017
+
+// button
+.button {
+    display: inline-block;
+    background: $color-accent;
+    outline: none;
+    border: none;
+
+    @include modifier('round') {
+        display: inline-flex;
+        height: 64px;
+        width: 64px;
+        border-radius: 100%;
+        align-items: center;
+        justify-content: center;
+        will-change: background;
+        transition: 0.375 $curve-sharp;
+        @include box-shadow(2);
+
+        // Icon
+        i {
+            color: $color-text-primary;
+        }
+
+        // Focus
+        &:focus {
+            background: darken($color-accent, 2);
+        }
+
+        // Active
+        &:active {
+            background: darken($color-accent, 4);
+        }
+    }
+}
