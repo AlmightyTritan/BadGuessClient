@@ -1,7 +1,7 @@
 <template lang="html">
     <form @submit.prevent="joinRoom">
-        <input type="text" v-model.trim="username" :invalid="!isUsernameValid">
-        <input type="text" v-model.trim="roomCode" :invalid="!isRoomCodeValid">
+        <input type="text" v-model.trim="username" :invalid="!usernameValid">
+        <input type="text" v-model.trim="roomCode" :invalid="!roomCodeValid">
         <input type="submit">
     </form>
 </template>
@@ -22,8 +22,8 @@ export default class PlayerForm extends Vue {
     // Class data
     username = '';
     roomCode = '';
-    isUsernameValid = '';
-    isRoomCodeValid = '';
+    usernameValid = '';
+    roomCodeValid = '';
 
     /**
      * @desc This method will let the player join the requested room
@@ -31,11 +31,12 @@ export default class PlayerForm extends Vue {
      */
     joinRoom() {
         // If the form is invalid
-        if (!this.isUsernameValid || !this.isRoomCodeValid) {
+        if (!this.usernameValid || !this.roomCodeValid) {
             return;
         }
 
         // Make an attempt to join the room
+        this.$router.push({ path: 'game/' + this.roomCode });
     }
 
     /**
@@ -46,12 +47,12 @@ export default class PlayerForm extends Vue {
     onUsernameChange() {
         // If the username length is longer than 0 validate it
         if (this.username.length <= 0) {
-            this.isUsernameValid = false;
+            this.usernameValid = false;
         }
 
         // Else it's valid
         else {
-            this.isUsernameValid = true;
+            this.usernameValid = true;
         }
 
         // If the username is longer than 12 chars clamp it
@@ -68,12 +69,12 @@ export default class PlayerForm extends Vue {
     onRoomCodeChange() {
         // If the username length is longer than 0 validate it
         if (this.roomCode.length <= 0) {
-            this.isRoomCodeValid = false;
+            this.roomCodeValid = false;
         }
 
         // Else it's valid
         else {
-            this.isRoomCodeValid = true;
+            this.roomCodeValid = true;
         }
     }
 }
