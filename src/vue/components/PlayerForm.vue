@@ -5,7 +5,7 @@
             <input type="text" v-model.trim="username" :invalid="usernameInvalid" placeholder="Username">
             <input type="text" v-model.trim="roomCode" :invalid="roomCodeInvalid" placeholder="Room code">
         </section>
-        <button @click.prevent="joinRoom" class="button--round player-form__button" tabindex="0"><i class="material-icons">play_arrow</i></button>
+        <button @click.prevent="joinRoom" class="button--round player-form__button"><i class="material-icons">play_arrow</i></button>
     </form>
 </template>
 
@@ -95,9 +95,11 @@ export default class PlayerForm extends Vue {
     position: relative;
     display: flex;
     max-width: 400px;
+    width: 100%;
     padding-bottom: 32px;
-    margin: 16px;
+    margin: 32px 16px;
     flex-direction: column;
+    align-self: flex-start;
     box-sizing: border-box;
     border-radius: 4px;
     background-color: lighten($color-background, 2);

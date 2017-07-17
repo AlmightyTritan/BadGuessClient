@@ -1,5 +1,5 @@
 <template lang="html">
-    <form @submit.prevent="sendDrawing">
+    <form @submit.prevent="sendDrawing" class="drawing-canvas" :style="'width:' + (canvasSize + 32) + 'px'">
         <canvas
             @mousedown.prevent="penStart"
             @touchstart.prevent="penStart"
@@ -7,27 +7,37 @@
             @touchmove.prevent="penMove"
             @mouseup.prevent="penStop"
             @mouseleave.prevent="penStop"
+            class="drawing-canvas__canvas"
             ref="drawingCanvas"
-            width="300"
-            height="300"></canvas>
-        <input type="submit" />
+            :width="canvasSize"
+            :height="canvasSize"></canvas>
+        <div class="drawing-canvas__hint">
+            <h4>{{ getAdvice }}</h4>
+            <p>{{ hint }}</p>
+        </div>
+        <button @click.prevent="sendDrawing" class="button--round drawing-canvas__button"><i class="material-icons">send</i></button>
     </form>
 </template>
 
 <script>
 // Imports
 import { Component, Vue } from 'vue-property-decorator';
+import debounce from 'lodash.debounce';
+import config from 'config/config.js';
 
 /**
  * @name DrawingCanvas
  * @desc This class handles the submission and drawing of images for the round
  * @since Jul 16 2017
  */
-@Component
+@Component({
+    props: ['hint']
+})
 export default class DrawingCanvas extends Vue {
     // Class data
     canvas = null;
     canvasContext = null;
+    canvasSize = 600;
     penSize = 4;
     fillColor = '#000000';
     penDown = false;
@@ -36,14 +46,19 @@ export default class DrawingCanvas extends Vue {
 
     // Mounted
     mounted() {
+        // Get the initial canvas size
+        this.resizeCanvas();
+
         // Get the canvas context
         this.canvas = this.$refs.drawingCanvas;
         this.canvasContext = this.canvas.getContext('2d');
 
         // Set canvas style
         this.canvasContext.fillStyle = this.fillColor;
-        this.canvasContext.lineWidth = (this.penSize * 2);
         this.canvasContext.lineCap = 'round';
+
+        // Resize canvas based on current screen size
+        window.addEventListener('resize', debounce(this.resizeCanvas, 500));
     }
 
     /**
@@ -63,6 +78,9 @@ export default class DrawingCanvas extends Vue {
      * @param {int} y
      */
     renderLine(x, y) {
+        // Set line size
+        this.canvasContext.lineWidth = (this.penSize * 2);
+
         // Render the line on the canvas
         this.canvasContext.beginPath();
         this.canvasContext.moveTo(this.penLastPosition.x, this.penLastPosition.y);
@@ -110,7 +128,7 @@ export default class DrawingCanvas extends Vue {
      */
     touchPosition(e) {
         // If there are touches made
-        if (e.touches && e.touches.length > 1) {
+        if (e.touches && e.touches.length >= 1) {
             // return the x and the y position for the touch
             return {
                 x: e.touches[0].pageX - e.touches[0].target.offsetLeft,
@@ -175,8 +193,96 @@ export default class DrawingCanvas extends Vue {
             this.penLastPosition = this.penPosition;
         }
     }
+
+    /**
+     * @desc This method will hide and resize the canvas based
+     *      on the current screen size
+     * @since Jul 16 2017
+     */
+    resizeCanvas() {
+        // If the window is smaller than 432
+        if (window.innerWidth < 432) {
+            this.canvasSize = 300;
+        }
+
+        // Else the window is smaller than 640
+        else if (window.innerWidth < 640 && window.innerWidth >= 432) {
+            this.canvasSize = 400;
+        }
+
+        // Else if the window is back to our max
+        else {
+            this.canvasSize = 600;
+        }
+    }
+
+    /**
+     * @desc This will return a random advice message
+     * @since Jul 2017
+     * @returns {string}
+     */
+    get getAdvice() {
+        return config.adviceMessages[Math.floor(Math.random() * config.adviceMessages.length)]
+    }
 }
 </script>
 
 <style lang="scss">
+@import '~scss/util/util';
+
+// drawing-canvas
+.drawing-canvas {
+    display: flex;
+    padding: 16px;
+    box-sizing: border-box;
+    align-items: center;
+    flex-direction: column;
+
+    // drawing-canvas__canvas
+    @include element('canvas') {
+        margin-bottom: 16px;
+        background: white;
+        cursor: crosshair;
+        border-radius: 2%;
+        @include box-shadow(2);
+    }
+
+    // drawing-canvas__hint
+    @include element('hint') {
+        width: 100%;
+        padding: 16px;
+        margin-bottom: 16px;
+        background: $color-accent;
+        box-sizing: border-box;
+        border-radius: 4px;
+
+        // Advice
+        h4 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 400;
+            color: $color-text-secondary;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        // Hint
+        p {
+            margin: 0;
+            font-size: 48px;
+            font-weight: 800;
+            text-align: center;
+        }
+    }
+
+    // drawing-canvas__button
+    @include element('button') {
+        // Mobile
+        @include breakpoint('small') {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+        }
+    }
+}
 </style>

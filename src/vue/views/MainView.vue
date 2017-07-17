@@ -1,6 +1,8 @@
 <template lang="html">
     <main class="view--main">
         <player-form></player-form>
+        <host-form></host-form>
+        <credits></credits>
     </main>
 </template>
 
@@ -8,6 +10,8 @@
 // Imports
 import { Component, Vue } from 'vue-property-decorator';
 import PlayerForm from 'vue/components/PlayerForm.vue';
+import HostForm from 'vue/components/HostForm.vue';
+import Credits from 'vue/components/Credits.vue';
 
 /**
  * @name MainView
@@ -16,7 +20,9 @@ import PlayerForm from 'vue/components/PlayerForm.vue';
  */
 @Component({
     components: {
-        PlayerForm
+        PlayerForm,
+        HostForm,
+        Credits
     }
 })
 export default class MainView extends Vue {
@@ -32,7 +38,7 @@ export default class MainView extends Vue {
 .view--main {
     @extend .view;
     display: flex;
-    align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
 }
 </style>

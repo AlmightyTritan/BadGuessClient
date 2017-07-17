@@ -1,6 +1,6 @@
 <template lang="html">
-    <main class="view">
-        <drawing-canvas></drawing-canvas>
+    <main class="view--game">
+        <drawing-canvas hint="Duck"></drawing-canvas>
     </main>
 </template>
 
@@ -25,4 +25,14 @@ export default class GameView extends Vue {
 </script>
 
 <style lang="scss">
+@import '~scss/util/util';
+@import '~scss/partial/components/view';
+
+// view--game
+.view--game {
+    @extend .view;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 </style>
