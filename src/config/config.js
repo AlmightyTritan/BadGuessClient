@@ -4,8 +4,12 @@
  */
 
 export default {
-    // User
+    // URL
+    baseURL: 'http://localhost:8080/#/lobby/',
+
+    // Player
     usernameLimit: 18,
+    playerLimit: 8,
 
     // Text
     adviceMessages: [

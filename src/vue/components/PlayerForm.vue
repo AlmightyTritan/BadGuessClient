@@ -103,7 +103,7 @@ export default class PlayerForm extends Vue {
     box-sizing: border-box;
     border-radius: 4px;
     background-color: lighten($color-background, 2);
-    @include box-shadow(2);
+    @include box-shadow(4);
 
     // player-form__header
     @include element('header') {
@@ -131,6 +131,7 @@ export default class PlayerForm extends Vue {
         bottom: 0;
         left: 50%;
         transform: translate(-50%, 50%);
+        @include box-shadow(4);
     }
 }
 </style>

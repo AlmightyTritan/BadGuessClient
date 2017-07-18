@@ -1,5 +1,6 @@
 <template lang="html">
     <main class="view--main">
+        <game-title></game-title>
         <player-form></player-form>
         <host-form></host-form>
         <credits></credits>
@@ -12,6 +13,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import PlayerForm from 'vue/components/PlayerForm.vue';
 import HostForm from 'vue/components/HostForm.vue';
 import Credits from 'vue/components/Credits.vue';
+import GameTitle from 'vue/components/GameTitle.vue';
 
 /**
  * @name MainView
@@ -22,7 +24,8 @@ import Credits from 'vue/components/Credits.vue';
     components: {
         PlayerForm,
         HostForm,
-        Credits
+        Credits,
+        GameTitle
     }
 })
 export default class MainView extends Vue {

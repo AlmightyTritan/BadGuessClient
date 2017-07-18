@@ -14,6 +14,16 @@ $color-invalid: #FF4E49;
 $color-text-primary: rgba(255, 255, 255, 1);
 $color-text-secondary: rgba(255, 255, 255, 0.7);
 $color-text-disable: rgba(255, 255, 255, 0.3);
+$colors-players: (
+    0: #E83F6F,
+    1: #2274A5,
+    2: #FFBF00,
+    3: #32936F,
+    4: #FF8300,
+    5: #B071E2,
+    6: #36D1D4,
+    7: #DB5DAD,
+);
 
 // Shades
 $shade-key-umbra-opacity: 0.2;

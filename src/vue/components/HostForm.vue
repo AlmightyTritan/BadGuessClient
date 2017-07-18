@@ -2,7 +2,7 @@
     <div class="host-form">
         <h3 class="host-form__header">Host Game</h3>
         <p class="host-form__details">
-            Sabotage or help your friends in {GAME_NAME}, the worlds best jackbox wannabe!
+            Sabotage or help your friends in Vandrawlism, the worlds best jackbox wannabe!
         </p>
         <section class="host-form__requirements">
             <h4>All You Need To Start Is</h4>
@@ -62,7 +62,7 @@ export default class HostForm extends Vue {
     box-sizing: border-box;
     border-radius: 4px;
     background-color: lighten($color-background, 2);
-    @include box-shadow(2);
+    @include box-shadow(4);
 
     // host-form__header
     @include element('header') {
@@ -143,6 +143,7 @@ export default class HostForm extends Vue {
         left: 50%;
         background: $color-complement;
         transform: translate(-50%, 50%);
+        @include box-shadow(4);
 
         // Focus
         &:focus {
