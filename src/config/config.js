@@ -9,6 +9,7 @@ export default {
 
     // Client
     clientUsername: 'BigScreenClient',
+    roomPollRate: 500,
 
     // URL
     baseURL: 'http://localhost:8080/#/lobby/',

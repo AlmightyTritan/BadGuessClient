@@ -7,6 +7,8 @@
 <script>
 // Imports
 import { Component, Vue } from 'vue-property-decorator';
+import request from 'superagent/superagent';
+import config from 'config/config.js';
 import PlayerRoster from 'vue/components/PlayerRoster.vue';
 
 /**
@@ -20,7 +22,40 @@ import PlayerRoster from 'vue/components/PlayerRoster.vue';
     }
 })
 export default class LobbyView extends Vue {
+    // Mounted
+    mounted() {
+        // Check if the game has the initial room
+        if (this.$root.$data.room == null) {
+            // Make a room check request
+            let roomReq = request('POST', config.serverURL + 'Room/CheckRoom.php')
+                .set({
+                    'Accept': 'application/json',
+                })
+                .withCredentials()
+                .type('form')
+                .send({ Id: this.$route.params.roomCode });
 
+            // On room checked
+            roomReq.then((res) => {
+                // If there was an issue creating the room
+                if (res.body.Status == 400) {
+                    throw res.body.Message;
+                }
+
+                // Set the room
+                this.$root.$emit('initialRoomFound', res.body.Room);
+            })
+
+            // On exception caught
+            .catch((ex) => {
+                // Redirect to the main page
+                this.$router.push({ path: '/' });
+
+                // Print the error to the console, it's a game jam game anyway
+                console.error(ex);
+            });
+        }
+    }
 }
 </script>
 
@@ -32,6 +67,6 @@ export default class LobbyView extends Vue {
 .view--lobby {
     @extend .view;
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
 }
 </style>

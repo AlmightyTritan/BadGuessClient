@@ -49,7 +49,10 @@ export default class HostForm extends Vue {
             })
             .withCredentials()
             .type('form')
-            .send({ Name: 'test' });
+            .send({ Name: config.clientUsername });
+
+        // Start Loading animation
+        this.$root.$emit('loading', true);
 
         // On session created
         sessionReq.then((res) => {
@@ -57,10 +60,6 @@ export default class HostForm extends Vue {
             if (res.body.Status == 400) {
                 throw res.body.Message;
             }
-
-            // Store our session id and role
-            // this.$cookie.set('clientId', res.body.User.Id, 1);
-            // this.$cookie.set('clientRole', 'spectator', 1);
 
             // Make a request to create a games room
             let roomReq = request('GET', config.serverURL + 'Room/CreateRoom.php')
@@ -71,18 +70,36 @@ export default class HostForm extends Vue {
 
             // On room created
             roomReq.then((res) => {
-                console.log(res.body);
-                //this.$router.push({ path: 'lobby/' });
+                // If there was an issue creating the room
+                if (res.body.Status == 400) {
+                    throw res.body.Message;
+                }
+
+                // Stop loading
+                this.$root.$emit('loading', false);
+
+                // Set the room
+                this.$root.$emit('initialRoomFound', res.body.Room);
+
+                // Go to the lobby view
+                this.$router.push({ path: '/lobby/' + res.body.Room.Id });
             })
 
             // Catch exceptions
             .catch((ex) => {
+                // Stop loading
+                this.$root.$emit('loading', false);
 
+                // Print the error to the console, it's a game jam game anyway
+                console.error(ex);
             });
         })
 
         // Catch exceptions
         .catch((ex) => {
+            // Stop loading
+            this.$root.$emit('loading', false);
+
             // Print the error to the console, it's a game jam game anyway
             console.error(ex);
         });

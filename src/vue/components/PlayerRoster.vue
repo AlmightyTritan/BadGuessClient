@@ -1,13 +1,6 @@
 <template lang="html">
     <ul class="player-roster">
-        <player-avatar :player="{ username: 'Player 1' }" :index="0"></player-avatar>
-        <player-avatar :player="{ username: 'Player 2' }" :index="1"></player-avatar>
-        <player-avatar :player="{ username: 'Player 3' }" :index="2"></player-avatar>
-        <player-avatar :player="{ username: 'Player 4' }" :index="3"></player-avatar>
-        <player-avatar :player="{ username: 'Player 5' }" :index="4"></player-avatar>
-        <player-avatar :player="{ username: 'Player 6' }" :index="5"></player-avatar>
-        <player-avatar :player="{ username: 'Player 7' }" :index="6"></player-avatar>
-        <player-avatar :player="{ username: 'Player 8' }" :index="7"></player-avatar>
+        <player-avatar v-for="(player, index) in players" :username="player.username" :index="index"></player-avatar>
     </ul>
 </template>
 
@@ -24,10 +17,27 @@ import PlayerAvatar from 'vue/components/PlayerAvatar.vue';
 @Component({
     components: {
         PlayerAvatar,
-    },
-    props: ['players']
+    }
 })
 export default class PlayerRoster extends Vue {
+    // Class data
+    players = [];
+
+    // Created
+    created() {
+        // Add event listeners
+        this.$root.$on('playersChanged', this.setPlayers);
+    }
+
+    /**
+     * @desc This method will update the local copy of the players
+     * @since Jul 20 2017
+     * @param {array} players
+     */
+    setPlayers(players) {
+        this.players = players;
+    }
+
 }
 </script>
 

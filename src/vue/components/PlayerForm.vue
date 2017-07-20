@@ -12,6 +12,7 @@
 <script>
 // Imports
 import { Component, Vue, Watch } from 'vue-property-decorator';
+import request from 'superagent/superagent';
 import config from 'config/config.js';
 
 /**
@@ -42,8 +43,68 @@ export default class PlayerForm extends Vue {
             return;
         }
 
-        // Make an attempt to join the room
-        this.$router.push({ path: 'game/' + this.roomCode });
+        // Start loading
+        this.$root.$emit('loading', true);
+
+        // Create a session for this player
+        let sessionReq = request('POST', config.serverURL + 'Session/CreateSession.php')
+            .set({
+                'Accept': 'application/json',
+            })
+            .withCredentials()
+            .type('form')
+            .send({ Name: this.username });
+
+        // On request response
+        sessionReq.then((res) => {
+            // If there was an issue creating a session on the server
+            if (res.body.Status == 400) {
+                throw res.body.Message;
+            }
+
+            // Make a request to join the room
+            let roomReq = request('POST', config.serverURL + 'Room/JoinRoom.php')
+                .set({
+                    'Accept': 'application/json',
+                })
+                .withCredentials()
+                .type('form')
+                .send({
+                    Id: this.roomCode,    
+                    Role: 'Player',
+                 });
+
+            // On request response
+            roomReq.then((res) => {
+                // If there was an issue creating a session on the server
+                if (res.body.Status == 400) {
+                    throw res.body.Message;
+                }
+
+                // Stop loading
+                this.$root.$emit('loading', false);
+
+                // Go the room
+                this.$router.push({ path: '/game/' + this.roomCode });
+            })
+
+            .catch((ex) => {
+                // Stop loading
+                this.$root.$emit('loading', false);
+
+                // Print the error to the console, it's a game jam game anyway
+                console.error(ex);
+            });
+        })
+
+        // Catch exceptions
+        .catch((ex) => {
+            // Stop loading
+            this.$root.$emit('loading', false);
+
+            // Print the error to the console, it's a game jam game anyway
+            console.error(ex);
+        });
     }
 
     /**
@@ -122,6 +183,7 @@ export default class PlayerForm extends Vue {
         // Input
         input {
             width: 100%;
+            text-transform: uppercase;
         }
     }
 

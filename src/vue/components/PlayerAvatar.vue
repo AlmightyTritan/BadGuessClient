@@ -11,7 +11,7 @@
             <img src="~assets/img/player-7.png" v-if="index == 7">
         </div>
         <div :class="'player-avatar__nametag--' + index">
-            {{ player.username }}
+            {{ username }}
         </div>
     </li>
 </template>
@@ -27,11 +27,8 @@ import { Component, Vue } from 'vue-property-decorator';
  */
 @Component({
     props: {
-        player: {
-            type: Object,
-            default: {
-                username: '',
-            },
+        username: {
+            type: String,
             required: true,
         },
         index: {

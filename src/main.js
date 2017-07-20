@@ -9,13 +9,13 @@ import LobbyView from 'vue/views/LobbyView.vue';
 
 // Init plugins
 Vue.use(VueRouter);
-//Vue.use(VueCookie);
+Vue.use(VueCookie);
 
 // Init router
 let routes = [
-    { path: '/', component: MainView },
+    { path: '/:roomCode?', component: MainView },
     { path: '/game/:roomCode', component: GameView },
-    { path: '/lobby', component: LobbyView }
+    { path: '/lobby/:roomCode', component: LobbyView }
 ];
 let router = new VueRouter({ routes });
 
