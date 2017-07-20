@@ -4,8 +4,15 @@
  */
 
 export default {
+    // Debug
+    debug: true,
+
+    // Client
+    clientUsername: 'BigScreenClient',
+
     // URL
     baseURL: 'http://localhost:8080/#/lobby/',
+    serverURL: 'http://localhost:8000/api/',
 
     // Player
     usernameLimit: 18,

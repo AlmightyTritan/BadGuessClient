@@ -11,8 +11,10 @@
   "dependencies": {
     "lodash": "^4.17.4",
     "lodash.debounce": "^4.0.8",
+    "superagent": "^3.5.2",
     "vue": "^2.3.3",
     "vue-class-component": "^5.0.2",
+    "vue-cookie": "^1.1.4",
     "vue-property-decorator": "^5.1.1",
     "vue-router": "^2.7.0"
   },

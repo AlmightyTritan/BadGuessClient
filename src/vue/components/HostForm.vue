@@ -26,6 +26,8 @@
 <script>
 // Imports
 import { Component, Vue } from 'vue-property-decorator';
+import request from 'superagent/superagent';
+import config from 'config/config.js';
 
 /**
  * @name HostForm
@@ -40,8 +42,50 @@ export default class HostForm extends Vue {
      * @since Jul 17 2017
      */
     hostGame() {
-        // Make an attempt to create the game room
-        this.$router.push({ path: 'lobby/' });
+        // Make a request to the server to create a session
+        let sessionReq = request('POST', config.serverURL + 'Session/CreateSession.php')
+            .set({
+                'Accept': 'application/json',
+            })
+            .withCredentials()
+            .type('form')
+            .send({ Name: 'test' });
+
+        // On session created
+        sessionReq.then((res) => {
+            // If there was no session on the server
+            if (res.body.Status == 400) {
+                throw res.body.Message;
+            }
+
+            // Store our session id and role
+            // this.$cookie.set('clientId', res.body.User.Id, 1);
+            // this.$cookie.set('clientRole', 'spectator', 1);
+
+            // Make a request to create a games room
+            let roomReq = request('GET', config.serverURL + 'Room/CreateRoom.php')
+                .set({
+                    'Accept': 'application/json',
+                })
+                .withCredentials();
+
+            // On room created
+            roomReq.then((res) => {
+                console.log(res.body);
+                //this.$router.push({ path: 'lobby/' });
+            })
+
+            // Catch exceptions
+            .catch((ex) => {
+
+            });
+        })
+
+        // Catch exceptions
+        .catch((ex) => {
+            // Print the error to the console, it's a game jam game anyway
+            console.error(ex);
+        });
     }
 }
 </script>

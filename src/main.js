@@ -1,13 +1,15 @@
 // Imports
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import App from 'vue/App.vue';
+import VueCookie from 'vue-cookie'
+import Game from 'vue/Game.vue';
 import MainView from 'vue/views/MainView.vue';
 import GameView from 'vue/views/GameView.vue';
 import LobbyView from 'vue/views/LobbyView.vue';
 
 // Init plugins
 Vue.use(VueRouter);
+//Vue.use(VueCookie);
 
 // Init router
 let routes = [
@@ -21,7 +23,7 @@ let router = new VueRouter({ routes });
 let app = new Vue({
     el: '#app',
     router: router,
-    render: h => h(App)
+    render: h => h(Game)
 });
 
 // Export
