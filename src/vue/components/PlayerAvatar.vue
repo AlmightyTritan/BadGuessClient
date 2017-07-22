@@ -1,14 +1,14 @@
 <template lang="html">
     <li :class="'player-avatar--' + index">
         <div :class="'player-avatar__picture--' + index">
-            <img src="~assets/img/player-0.png" v-if="index == 0">
-            <img src="~assets/img/player-1.png" v-if="index == 1">
-            <img src="~assets/img/player-2.png" v-if="index == 2">
-            <img src="~assets/img/player-3.png" v-if="index == 3">
-            <img src="~assets/img/player-4.png" v-if="index == 4">
-            <img src="~assets/img/player-5.png" v-if="index == 5">
-            <img src="~assets/img/player-6.png" v-if="index == 6">
-            <img src="~assets/img/player-7.png" v-if="index == 7">
+            <img src="dist/player-0.png" v-if="index == 0">
+            <img src="dist/player-1.png" v-if="index == 1">
+            <img src="dist/player-2.png" v-if="index == 2">
+            <img src="dist/player-3.png" v-if="index == 3">
+            <img src="dist/player-4.png" v-if="index == 4">
+            <img src="dist/player-5.png" v-if="index == 5">
+            <img src="dist/player-6.png" v-if="index == 6">
+            <img src="dist/player-7.png" v-if="index == 7">
         </div>
         <div :class="'player-avatar__nametag--' + index">
             {{ username }}

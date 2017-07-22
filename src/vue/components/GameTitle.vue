@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="game-title">
-        <img src="~assets/img/logo.png">
+        <img src="dist/logo.png">
     </div>
 </template>
 
