@@ -3,20 +3,23 @@
  * @since Jul 15 2017
  */
 
-export default {
+let config = {
     // Debug
     debug: true,
+
+    // Cookies
+    cookieDuration: 0.04,
 
     // Client
     clientUsername: 'BigScreenClient',
     roomPollRate: 500,
 
     // URL
-    baseURL: 'http://localhost:8080/#/lobby/',
-    serverURL: 'http://localhost:8000/api/',
+    siteURL: 'https://dev.shatteredscreen.xyz/vdraw/',
+    serverURL: 'https://dev.shatteredscreen.xyz/vdraw-server/',
 
     // Player
-    usernameLimit: 18,
+    usernameLimit: 12,
     playerLimit: 8,
 
     // Text
@@ -29,3 +32,16 @@ export default {
         'Wow we\'d lose our PG-13 rating if you drew a',
     ],
 }
+
+// If debug build
+if (config.debug) {
+    // Overwrite with debug values
+    config = Object.assign({}, config, {
+        // URL
+        siteURL: 'http://localhost:8080/',
+        serverURL: 'http://localhost:8000/api/',
+    });
+}
+
+// Export
+export default config;

@@ -16,6 +16,11 @@ input[type="password"] {
     transition: 0.375s $curve-standard;
     @include box-shadow(1);
 
+    // Placeholder
+    &::placeholder {
+        text-transform: capitalize;
+    }
+
     // Invalid
     &[invalid="true"] {
         border-bottom: 2px solid $color-invalid;

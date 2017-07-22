@@ -35,7 +35,8 @@ export default class Game extends Vue {
     created() {
         // Init the throttle
         this.concurrentThrottle = new Throttle({
-            ratePer: 200,
+            rate: 1,
+            ratePer: 500,
             concurrent: 1
         });
 

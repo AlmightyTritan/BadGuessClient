@@ -1,6 +1,14 @@
 <template lang="html">
     <main class="view--lobby">
-        <player-roster></player-roster>
+        <!-- Spectator Part -->
+        <template v-if="clientType == 'spectator'">
+            <room-details :roomCode="roomCode"></room-details>
+            <player-roster></player-roster>
+        </template>
+
+        <!-- Player Part -->
+        <template v-else>
+        </template>
     </main>
 </template>
 
@@ -10,6 +18,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import request from 'superagent/superagent';
 import config from 'config/config.js';
 import PlayerRoster from 'vue/components/PlayerRoster.vue';
+import RoomDetails from 'vue/components/RoomDetails.vue';
 
 /**
  * @name LobbyView
@@ -18,12 +27,23 @@ import PlayerRoster from 'vue/components/PlayerRoster.vue';
  */
 @Component({
     components: {
-        PlayerRoster
+        PlayerRoster,
+        RoomDetails
     }
 })
 export default class LobbyView extends Vue {
+    // Class data
+    roomCode = '';
+    clientType = 'spectator';
+
     // Mounted
     mounted() {
+        // Set the room code
+        this.roomCode = this.$route.params.roomCode
+
+        // Get the current client type
+        this.clientType = this.$cookie.get('sessionRole');
+
         // Check if the game has the initial room
         if (this.$root.$data.room == null) {
             // Make a room check request
@@ -33,7 +53,7 @@ export default class LobbyView extends Vue {
                 })
                 .withCredentials()
                 .type('form')
-                .send({ Id: this.$route.params.roomCode });
+                .send({ Id: this.roomCode });
 
             // On room checked
             roomReq.then((res) => {

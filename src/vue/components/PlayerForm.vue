@@ -62,6 +62,11 @@ export default class PlayerForm extends Vue {
                 throw res.body.Message;
             }
 
+            // Set this sessions player
+            this.$cookie.set('sessionId', res.body.User.Id, config.cookieDuration);
+            this.$cookie.set('sessionUsername', res.body.User.Name, config.cookieDuration);
+            this.$cookie.set('sessionRole', 'player', config.cookieDuration);
+
             // Make a request to join the room
             let roomReq = request('POST', config.serverURL + 'Room/JoinRoom.php')
                 .set({
@@ -70,7 +75,7 @@ export default class PlayerForm extends Vue {
                 .withCredentials()
                 .type('form')
                 .send({
-                    Id: this.roomCode,    
+                    Id: this.roomCode.toLowerCase(),
                     Role: 'Player',
                  });
 
@@ -85,7 +90,7 @@ export default class PlayerForm extends Vue {
                 this.$root.$emit('loading', false);
 
                 // Go the room
-                this.$router.push({ path: '/game/' + this.roomCode });
+                this.$router.push({ path: '/lobby/' + this.roomCode });
             })
 
             .catch((ex) => {
@@ -163,7 +168,7 @@ export default class PlayerForm extends Vue {
     align-self: flex-start;
     box-sizing: border-box;
     border-radius: 4px;
-    background-color: lighten($color-background, 2);
+    background: lighten($color-background, 2);
     @include box-shadow(4);
 
     // player-form__header

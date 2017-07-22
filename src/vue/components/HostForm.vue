@@ -16,7 +16,7 @@
             </div>
             <div class="host-form__requirement">
                 <i class="material-icons">people</i>
-                <span>Friends</span>
+                <span>Friends (4-8)</span>
             </div>
         </section>
         <button @click.prevent="hostGame" class="button--round host-form__button"><i class="material-icons">play_arrow</i></button>
@@ -60,6 +60,12 @@ export default class HostForm extends Vue {
             if (res.body.Status == 400) {
                 throw res.body.Message;
             }
+
+            // Set session cookies
+            this.$cookie.set('sessionId', res.body.User.Id, config.cookieDuration);
+            this.$cookie.set('sessionUsername', res.body.User.Name, config.cookieDuration);
+            this.$cookie.set('sessionRole', 'spectator', config.cookieDuration);
+
 
             // Make a request to create a games room
             let roomReq = request('GET', config.serverURL + 'Room/CreateRoom.php')
@@ -122,7 +128,7 @@ export default class HostForm extends Vue {
     align-self: flex-start;
     box-sizing: border-box;
     border-radius: 4px;
-    background-color: lighten($color-background, 2);
+    background: lighten($color-background, 2);
     @include box-shadow(4);
 
     // host-form__header
@@ -174,7 +180,7 @@ export default class HostForm extends Vue {
     // host-form__requirement
     @include element('requirement') {
         display: flex;
-        flex: 0 0 20%;
+        flex: 0 0 25%;
         margin: 16px;
         justify-content: center;
         align-items: center;
@@ -186,13 +192,14 @@ export default class HostForm extends Vue {
             height: 24px;
             width: 24px;
             margin-bottom: 8px;
-            padding: 24px;
+            padding: 16px;
             border-radius: 50%;
             background: $color-text-disable;
         }
 
         // Label
         span {
+            font-size: 16px;
             color: $color-text-secondary;
         }
     }
