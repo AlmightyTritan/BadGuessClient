@@ -1,5 +1,5 @@
 <template lang="html">
-    <main class="view--lobby">
+    <main :class="getLobbyType">
         <!-- Spectator Part -->
         <template v-if="clientType == 'spectator'">
             <room-details :roomCode="roomCode"></room-details>
@@ -8,6 +8,9 @@
 
         <!-- Player Part -->
         <template v-else>
+            <player-details></player-details>
+            <tutorial></tutorial>
+            <a v-if="!roomStarted" @click="startGame" class="button" title="Start the game">Start Game</a>
         </template>
     </main>
 </template>
@@ -18,7 +21,9 @@ import { Component, Vue } from 'vue-property-decorator';
 import request from 'superagent/superagent';
 import config from 'config/config.js';
 import PlayerRoster from 'vue/components/PlayerRoster.vue';
+import PlayerDetails from 'vue/components/PlayerDetails.vue';
 import RoomDetails from 'vue/components/RoomDetails.vue';
+import Tutorial from 'vue/components/Tutorial.vue';
 
 /**
  * @name LobbyView
@@ -28,12 +33,15 @@ import RoomDetails from 'vue/components/RoomDetails.vue';
 @Component({
     components: {
         PlayerRoster,
-        RoomDetails
+        PlayerDetails,
+        RoomDetails,
+        Tutorial,
     }
 })
 export default class LobbyView extends Vue {
     // Class data
     roomCode = '';
+    roomStarted = false;
     clientType = 'spectator';
 
     // Mounted
@@ -76,6 +84,67 @@ export default class LobbyView extends Vue {
             });
         }
     }
+
+    /**
+     * @desc This method will tell the server to start the game
+     * @since Jul 24 2017
+     */
+    startGame() {
+        // Make a request to start the room
+        let startReq = request('POST', config.serverURL + 'Room/StartRoom.php')
+            .set({ 'Accept': 'application/json' })
+            .withCredentials()
+            .type('form')
+            .send({ Id: this.roomCode.toLowerCase() });
+
+
+        // On room started
+        startReq.then((res) => {
+            // If there was an issue starting the room
+            if (res.body.Status == 400) {
+                throw res.body.Message;
+            }
+
+            // Hide the start room button
+            this.roomStarted == false;
+        })
+
+        // On exception caught
+        .catch((ex) => {
+            // Print the error to the console, it's a game jam game anyway
+            console.error(ex);
+        });
+    }
+
+    /**
+     * @desc This method will return if the current player is player one
+     * @since Jul 24 2017
+     * @returns {bool}
+     */
+    get getIsPlayerOne() {
+        // If the room is already started
+        if (this.roomStarted) {
+            return false;
+        }
+
+        // If player one
+        let playerIndex = this.$cookie.get('sessionPlayerIndex');
+        if (playerIndex == 0) {
+            return true;
+        }
+
+        // The player is not player one so return false
+        return false;
+    }
+
+    /**
+     * @desc This method will return the proper class for the lobby view based
+     *      on the client type
+     * @since Jul 24 2017
+     */
+    get getLobbyType() {
+        return this.clientType == 'spectator' ? 'view--spectator-lobby' : 'view--player-lobby';
+    }
 }
 </script>
 
@@ -83,10 +152,21 @@ export default class LobbyView extends Vue {
 @import '~scss/util/util';
 @import '~scss/partial/components/view';
 
-// view--lobby
-.view--lobby {
+// view--spectator-lobby
+.view--spectator-lobby {
     @extend .view;
     display: flex;
     flex-direction: row;
+    align-items: baseline;
+    justify-content: center;
+}
+
+// view--player-lobby
+.view--player-lobby {
+    @extend .view;
+    display: flex;
+    padding-top: 64px;
+    flex-direction: column;
+    align-items: center;
 }
 </style>

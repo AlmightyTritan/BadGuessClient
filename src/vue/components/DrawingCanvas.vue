@@ -1,6 +1,7 @@
 <template lang="html">
     <form @submit.prevent="sendDrawing" class="drawing-canvas" :style="'width:' + (canvasSize + 32) + 'px'">
         <canvas
+            v-if="!encodedDrawing"
             @mousedown.prevent="penStart"
             @touchstart.prevent="penStart"
             @mousemove.prevent="penMove"
@@ -11,11 +12,26 @@
             ref="drawingCanvas"
             :width="canvasSize"
             :height="canvasSize"></canvas>
+        <div class="drawing-canvas__submitted-canvas-container">
+            <div v-if="encodedDrawing" class="drawing-canvas__submitted-canvas" :style="{ height: canvasSize + 'px', width: canvasSize + 'px' }">
+                <img class="drawing-canvas__submission" :src="encodedDrawing">
+                <div v-if="harmfulSubmission" class="drawing-canvas__submission--back drawing-canvas__submission--harm">Harmed</div>
+                <div v-else class="drawing-canvas__submission--back">Helped</div>
+            </div>
+        </div>
         <div class="drawing-canvas__hint">
-            <h4>{{ getAdvice }}</h4>
+            <h4>CORRECT</h4>
             <p>{{ hint }}</p>
         </div>
-        <button @click.prevent="sendDrawing" class="button--round drawing-canvas__button"><i class="material-icons">send</i></button>
+        <div class="drawing-canvas__actions">
+            <button @click.prevent="sendDrawing(true)" class="button--round drawing-canvas__button--harm">
+                <i class="material-icons">mood_bad</i>
+            </button>
+            <button @click.prevent="sendDrawing()" class="button--round drawing-canvas__button">
+                <i class="material-icons">mood</i>
+            </button>
+        </div>
+
     </form>
 </template>
 
@@ -43,6 +59,8 @@ export default class DrawingCanvas extends Vue {
     penDown = false;
     penPosition = { x: 0, y: 0 };
     penLastPosition = { x: 0, y: 0 };
+    encodedDrawing = null;
+    harmfulSubmission = false;
 
     // Mounted
     mounted() {
@@ -65,10 +83,14 @@ export default class DrawingCanvas extends Vue {
      * @desc This method will capture the current drawing of the canvas
      *      and will submit it to the server as a hint
      * @since Jul 16 2017
+     * @param {bool} harm
      */
-    sendDrawing() {
+    sendDrawing(harm=false) {
+        // Capture the submissionType
+        this.harmfulSubmission = harm;
+
         // Capture the drawing
-        let encodedDrawing = this.canvas.toDataURL();
+        this.encodedDrawing = this.canvas.toDataURL();
     }
 
     /**
@@ -247,6 +269,55 @@ export default class DrawingCanvas extends Vue {
         @include box-shadow(2);
     }
 
+    // drawing-canvas__submitted-canvas
+    @include element('submitted-canvas') {
+        margin-bottom: 16px;
+        border-radius: 2%;
+        transform-style: preserve-3d;
+        animation: flip 0.375s normal ease;
+        animation-fill-mode: forwards;
+    }
+
+    // drawing-canvas__submitted-canvas-container
+    @include element('submitted-canvas-container') {
+        perspective: 1000px;
+    }
+
+    // drawing-canvas__submission
+    @include element('submission') {
+        position: absolute;
+        display: flex;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        cursor: crosshair;
+        background: #FFFFFF;
+        backface-visibility: hidden;
+        border-radius: 2%;
+        justify-content: center;
+        align-items: center;
+        font-size: 64px;
+        @include box-shadow(2);
+
+        // drawing-canvas__submission--back
+        @include modifier('back') {
+            transform: rotateY(180deg);
+            cursor: default;
+            background: #FFFFFF;
+            border: 6px solid $color-valid;
+            color: $color-valid;
+            box-sizing: border-box;
+            font-family: 'Permanent Marker', cursive;
+        }
+
+        // drawing-canvas__submission--harm
+        @include modifier('harm') {
+            border: 6px solid $color-invalid;
+            color: $color-invalid;
+        }
+    }
+
     // drawing-canvas__hint
     @include element('hint') {
         width: 100%;
@@ -275,14 +346,55 @@ export default class DrawingCanvas extends Vue {
         }
     }
 
+    // drawing-canvas__actions
+    @include element('actions') {
+        position: fixed;
+        display: flex;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        justify-content: space-between;
+    }
+
     // drawing-canvas__button
     @include element('button') {
-        // Mobile
-        @include breakpoint('small') {
-            position: fixed;
-            bottom: 16px;
-            right: 16px;
+        margin: 16px;
+        background: $color-valid;
+
+        // Focus
+        &:focus {
+            background: darken($color-valid, 2);
         }
+
+        // Active
+        &:active {
+            background: darken($color-valid, 4);
+        }
+
+        @include modifier('harm') {
+            background: $color-invalid;
+
+            // Focus
+            &:focus {
+                background: darken($color-invalid, 2);
+            }
+
+            // Active
+            &:active {
+                background: darken($color-invalid, 4);
+            }
+        }
+    }
+}
+
+// Animation flip
+@keyframes flip {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    100% {
+        transform: rotateY(180deg);
     }
 }
 </style>

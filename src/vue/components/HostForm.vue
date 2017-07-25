@@ -121,7 +121,7 @@ export default class HostForm extends Vue {
     position: relative;
     display: flex;
     max-width: 400px;
-    width: 100%;
+    width: calc(100% - 32px);
     padding-bottom: 32px;
     margin: 32px 16px;
     flex-direction: column;

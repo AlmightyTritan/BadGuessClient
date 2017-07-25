@@ -52,5 +52,6 @@ export default class PlayerRoster extends Vue {
     padding: 64px;
     list-style: none;
     box-sizing: border-box;
+    align-self: center;
 }
 </style>

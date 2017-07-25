@@ -69,9 +69,7 @@ export default class PlayerForm extends Vue {
 
             // Make a request to join the room
             let roomReq = request('POST', config.serverURL + 'Room/JoinRoom.php')
-                .set({
-                    'Accept': 'application/json',
-                })
+                .set({ 'Accept': 'application/json' })
                 .withCredentials()
                 .type('form')
                 .send({
@@ -161,7 +159,7 @@ export default class PlayerForm extends Vue {
     position: relative;
     display: flex;
     max-width: 400px;
-    width: 100%;
+    width: calc(100% - 32px);
     padding-bottom: 32px;
     margin: 32px 16px;
     flex-direction: column;

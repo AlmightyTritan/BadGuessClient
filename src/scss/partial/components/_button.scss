@@ -7,31 +7,41 @@
     background: $color-accent;
     outline: none;
     border: none;
+    padding: 8px 16px;
+    margin: 1em 0;
+    text-transform: uppercase;
+    text-align: center;
+    border-radius: 4px;
+    color: $color-text-primary;
+    will-change: background;
+    transition: 0.375 $curve-sharp;
+    @include box-shadow(2);
 
     @include modifier('round') {
         display: inline-flex;
         height: 64px;
         width: 64px;
+        padding: 0;
+        margin: 0;
         border-radius: 100%;
         align-items: center;
         justify-content: center;
-        will-change: background;
-        transition: 0.375 $curve-sharp;
         @include box-shadow(2);
 
         // Icon
         i {
             color: $color-text-primary;
+            font-size: 32px;
         }
+    }
 
-        // Focus
-        &:focus {
-            background: darken($color-accent, 2);
-        }
+    // Focus
+    &:focus {
+        background: darken($color-accent, 2);
+    }
 
-        // Active
-        &:active {
-            background: darken($color-accent, 4);
-        }
+    // Active
+    &:active {
+        background: darken($color-accent, 4);
     }
 }

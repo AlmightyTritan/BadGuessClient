@@ -27,6 +27,7 @@ export default class Game extends Vue {
     // Class data
     lastRender = 0;
     room = null;
+    roomStarted = 0;
     concurrentThrottle = null;
     playersCSV = null;
     players = [];
@@ -95,7 +96,7 @@ export default class Game extends Vue {
                     'Accept': 'application/json',
                 })
                 .withCredentials()
-                .use(this.concurrentThrottle.plugin())
+                //.use(this.concurrentThrottle.plugin())
                 .type('form')
                 .send({ Id: this.room.Id });
 
@@ -108,6 +109,7 @@ export default class Game extends Vue {
 
                 // Update the room and player csv
                 this.room = res.body.Room;
+                this.roomStarted = !!parseInt(this.room.Started);
                 this.playersCSV = this.room.Players;
             })
 
@@ -176,9 +178,30 @@ export default class Game extends Vue {
      */
     @Watch('players', { immediate: true, deep: true })
     onPlayersChange() {
+        // Loop through players to get sessioned player's number
+        for (var i = 0; i < this.players.length; i++) {
+            if (this.$cookie.get('sessionId') == this.players[i].id) {
+                this.$cookie.set('sessionPlayerIndex', i, config.cookieDuration);
+            }
+        }
+
+        // Emit the players changed event
         this.$root.$emit('playersChanged', this.players);
     }
 
+    /**
+     * @desc This method will move players to the game view once the game has
+     *      been set to the started state
+     * @since Jul 24 2017
+     */
+    @Watch('roomStarted')
+    onRoomStarted() {
+        // If the room is started
+        if (this.roomStarted) {
+            // Push players to the game view
+            this.$router.push({ path: '/game/' + this.room.Id });
+        }
+    }
 }
 </script>
 
